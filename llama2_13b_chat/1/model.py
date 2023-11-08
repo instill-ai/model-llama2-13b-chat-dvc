@@ -57,7 +57,7 @@ class TritonPythonModel:
                         role = str(x['role']).upper()
                         print(f'[DEBUG] Message {i}: {role}: {x["content"]}')
                         if i == 0:
-                            if role == 'system':
+                            if role == 'SYSTEM':
                                 conv = Conversation(
                                     system=str(x['content']),
                                     roles=("USER", "ASSISTANT"),
