@@ -57,13 +57,14 @@ class TritonPythonModel:
                     conv = None
                     for i, x in enumerate(parsed_conversation):
                         role = str(x['role']).lower()
+                        print(f'[DEBUG] Message {i}: {role}: {x["content"]}')
                         if i == 0:
                             if role == 'system':
                                 conv = Conversation(
                                     system=str(x['content']),
                                     roles=roles,
                                     version="llama_v2",
-                                    messages=(),
+                                    messages=[],
                                     offset=0,
                                     sep_style=SeparatorStyle.LLAMA_2,
                                     sep="<s>",
