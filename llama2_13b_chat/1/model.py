@@ -50,7 +50,7 @@ class TritonPythonModel:
 
                     # using fixed roles
                     roles = ['USER', 'ASSISTANT']
-                    roles_lookup = {x.lower(): i for i, x in enumerate(roles)}
+                    roles_lookup = {x: i for i, x in enumerate(roles)}
 
                     conv = None
                     for i, x in enumerate(parsed_conversation):
