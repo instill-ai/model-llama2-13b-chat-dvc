@@ -23,7 +23,7 @@ class TritonPythonModel:
     def initialize(self, args):
         self.logger = pb_utils.Logger
         self.model_config = json.loads(args["model_config"])
-        model_path = str(Path(__file__).parent.absolute().joinpath('Llama-2-7b-chat/'))
+        model_path = str(Path(__file__).parent.absolute().joinpath('Llama-2-7b-chat-hf/'))
         
         # https://github.com/vllm-project/vllm/blob/main/vllm/entrypoints/llm.py
         self.llm_engine = LLM(
