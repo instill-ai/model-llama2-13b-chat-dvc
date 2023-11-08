@@ -61,7 +61,7 @@ class TritonPythonModel:
                             if role == 'system':
                                 conv = Conversation(
                                     system=str(x['content']),
-                                    roles=tuple(roles),
+                                    roles=roles,
                                     version="llama_v2",
                                     messages=(),
                                     offset=0,
@@ -157,7 +157,8 @@ class TritonPythonModel:
 
                 text_outputs = []
                 for vllm_output in vllm_outputs:
-                    concated_complete_output = prompt + "".join([
+                    # concated_complete_output = prompt + "".join([ # Chat model no needs to repeated the prompt
+                    concated_complete_output = "".join([
                         str(complete_output.text)
                         for complete_output in vllm_output.outputs
                     ])
