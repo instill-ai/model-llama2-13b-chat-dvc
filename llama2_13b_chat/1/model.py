@@ -48,21 +48,19 @@ class TritonPythonModel:
                     parsed_conversation = json.loads(prompt)
                     # turn in to converstation?
 
-                    roles = []
-                    for x in parsed_conversation:
-                        if x['role'] not in roles:
-                            roles.append(x['role'].lower())
+                    # using fixed roles
+                    roles = ['USER', 'ASSISTANT']
                     roles_lookup = {x.lower(): i for i, x in enumerate(roles)}
 
                     conv = None
                     for i, x in enumerate(parsed_conversation):
-                        role = str(x['role']).lower()
+                        role = str(x['role']).upper()
                         print(f'[DEBUG] Message {i}: {role}: {x["content"]}')
                         if i == 0:
                             if role == 'system':
                                 conv = Conversation(
                                     system=str(x['content']),
-                                    roles=roles,
+                                    roles=("USER", "ASSISTANT"),
                                     version="llama_v2",
                                     messages=[],
                                     offset=0,
