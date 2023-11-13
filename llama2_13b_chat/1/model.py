@@ -1,7 +1,7 @@
 # pylint: skip-file
 import os
 import random
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 import json
 import time
@@ -24,14 +24,14 @@ class TritonPythonModel:
         self.logger = pb_utils.Logger
         self.model_config = json.loads(args["model_config"])
         model_path = str(Path(__file__).parent.absolute().joinpath('Llama-2-7b-chat-hf/'))
-        
+
         # https://github.com/vllm-project/vllm/blob/main/vllm/entrypoints/llm.py
         self.llm_engine = LLM(
             model = model_path,
             gpu_memory_utilization = 0.45,
-            tensor_parallel_size = 1
+            tensor_parallel_size = 4
         )
-        
+
         output0_config = pb_utils.get_output_config_by_name(self.model_config, "text")
         self.output0_dtype = pb_utils.triton_string_to_numpy(output0_config["data_type"])
 
@@ -73,15 +73,15 @@ class TritonPythonModel:
                                 conv.roles = tuple(roles)
                                 conv.append_message(conv.roles[roles_lookup[role]], x['content'])
                         else:
-                            conv.append_message(conv.roles[roles_lookup[role]], x['content'])                    
+                            conv.append_message(conv.roles[roles_lookup[role]], x['content'])
                     prompt_in_conversation = True
                 except json.decoder.JSONDecodeError:
                     pass
-                
+
                 if not prompt_in_conversation:
                     conv = conv_templates["llama_2"].copy()
                     conv.append_message(conv.roles[0], prompt)
-                
+
                 extra_params_str = ""
                 if pb_utils.get_input_tensor_by_name(request, "extra_params") is not None:
                     extra_params_str = str(pb_utils.get_input_tensor_by_name(request, "extra_params").as_numpy()[0].decode("utf-8"))
